@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,64 +20,58 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var count = 0;
-
+  final countC = Get.put(CounterController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => OtherPage())),
+            icon: Icon(Icons.refresh),
+          ),
+        ],
+      ),
       body: Center(
-        child: CountWidget(count: count),
+        child: CountWidget(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            count++;            
-          });
+          countC.add();
         },
       ),
     );
   }
 }
 
-class CountWidget extends StatefulWidget {
-  final int count;
-  CountWidget({
-    Key? key, required this.count
-  }) : super(key: key);
-
-  @override
-  State<CountWidget> createState() => _CountWidgetState();
-}
-
-class _CountWidgetState extends State<CountWidget> {
-
-  @override
-  void initState() {
-    print("initState");
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    print("didChangeDependencies");
-    super.didChangeDependencies();
-  }
-
-  @override
-  void didUpdateWidget(covariant CountWidget oldWidget) {
-    print("didUpdateWidget");
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    print("dispose");
-    super.dispose();
-  }
-
+class CountWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text('Angka ${widget.count}');
+    return GetBuilder<CounterController>(
+      initState: (_) => print('initstate'),
+      didChangeDependencies: (statu) => print('didChangeDependencies'),
+      didUpdateWidget: (oldWidget, state) => print('didUpdateWidget'),
+      dispose: (state) => print('dispose'),
+      builder: (c) => Text('Angka ${c.count}'),
+    );
+  }
+}
+
+class OtherPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+    );
+  }
+}
+
+class CounterController extends GetxController {
+  var count = 0;
+
+  void add() {
+    count++;
+    update();
   }
 }
