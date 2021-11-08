@@ -32,13 +32,17 @@ class HomePage extends StatelessWidget {
 }
 
 class TextPage extends StatelessWidget {
-  final textC = Get.put(TextController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: TextField(
-        controller: textC.myC,
+      body: GetBuilder<TextController>(
+        init: TextController(),
+        builder: (c) {
+          return TextField(
+            controller: c.myC,
+          );
+        },
       ),
     );
   }
